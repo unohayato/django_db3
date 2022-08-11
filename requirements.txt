@@ -1,0 +1,4 @@
+Django~=3.0.5
+dj_database_url
+python-dotenv
+mysqlclient~=1.4.6
