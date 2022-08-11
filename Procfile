@@ -1,0 +1,1 @@
+web: gunicorn oj_db.wsgi

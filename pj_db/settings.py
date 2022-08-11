@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '=h-fnj8z5*=x=32!#j(k__*z-@e5zgsbve#fbdqi4!6*ydu2_j'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -47,6 +47,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'pj_db.urls'
@@ -73,16 +74,16 @@ WSGI_APPLICATION = 'pj_db.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-import dj_database_url
-from dotenv import (
-    find_dotenv,
-    load_dotenv,
-)
+import environ
+import os
 
-load_dotenv(find_dotenv())
+env = environ.Env()
+env.read_env(os.path.join(BASE_DIR, '.env'))
 
+# デフォルト:SQLite3
+# 環境ファイルで指定したデータベースを使用
 DATABASES = {
-    'default': dj_database_url.config(conn_max_age=600),
+    'default': env.db(),
 }
 
 
@@ -116,10 +117,14 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
